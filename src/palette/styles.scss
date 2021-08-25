@@ -1,0 +1,32 @@
+#mix {
+  display: flex;
+}
+
+$color: aqua;
+
+#mix>div {
+  border: 1px solid grey;
+  width: 100px;
+  height: 100px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#base {
+  background-color: $color
+}
+
+$steps: 10;
+
+@for $i from 1 to $steps {
+  $percentage: percentage($i / ($steps - 1));
+
+
+  .mix-dark-#{$i} {
+    background-color: mix(black, $color, $percentage);
+  }
+  .mix-light-#{$i} {
+    background-color: mix(white, $color, $percentage);
+  }
+}
