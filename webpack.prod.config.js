@@ -4,13 +4,21 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  entry: './src/index.js',
-  output: {
-    filename: 'bundle.[contenthash].js',
-    path: path.resolve(__dirname,'./dist'),
-    publicPath: ''
+  entry: {
+    'palette': './src/pages/palette.js',
+    'typography': './src/pages/typography.js'
   },
-  mode: 'development',
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  },
+  output: {
+    filename: '[name].[contenthash].js',
+    path: path.resolve(__dirname,'./dist'),
+    publicPath: '/static/'
+  },
+  mode: 'production',
   module: {
     rules: [
       {
@@ -63,13 +71,22 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'styles.[contenthash].css'
+      filename: '[name].[contenthash].css'
     }),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: 'Webpack Template',
+      filename: 'palette.html',
+      chunks: ['palette'],
+      title: 'Palette Page',
       template: 'src/index.hbs',
-      description: 'some description'
+      description: 'palette page',
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'typography.html',
+      chunks: ['typography'],
+      title: 'Typography Page',
+      template: 'src/index.hbs',
+      description: 'typography page',
     })
   ]
 }

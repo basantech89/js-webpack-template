@@ -3,9 +3,12 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    'palette': './src/pages/palette.js',
+    'typography': './src/pages/typography.js'
+  },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname,'./dist'),
     publicPath: ''
   },
@@ -69,9 +72,18 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: 'Webpack Template',
+      filename: 'palette.html',
+      chunks: ['palette'],
+      title: 'Palette Page',
       template: 'src/index.hbs',
-      description: 'some description'
+      description: 'palette page',
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'typography.html',
+      chunks: ['typography'],
+      title: 'Typography Page',
+      template: 'src/index.hbs',
+      description: 'typography page',
     })
   ]
 }
