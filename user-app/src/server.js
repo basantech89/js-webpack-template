@@ -6,14 +6,8 @@ const app = express()
 
 app.use('/static', express.static(path.resolve(__dirname, '../dist')))
 
-app.get('/palette', function (req, res) {
-  const pathtoHtmlFile = path.resolve(__dirname, '../dist/palette.html')
-  const contentFromHtmlFile = fs.readFileSync(pathtoHtmlFile, 'utf-8')
-  res.send(contentFromHtmlFile)
-})
-
-app.get('/typography', function (req, res) {
-  const pathtoHtmlFile = path.resolve(__dirname, '../dist/typography.html')
+app.get('/', function (req, res) {
+  const pathtoHtmlFile = path.resolve(__dirname, '../dist/index.html')
   const contentFromHtmlFile = fs.readFileSync(pathtoHtmlFile, 'utf-8')
   res.send(contentFromHtmlFile)
 })

@@ -1,6 +1,7 @@
 const path = require('path')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { ModuleFederationPlugin } = require('webpack').container
 
 module.exports = {
   entry: {
@@ -10,14 +11,13 @@ module.exports = {
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname,'./dist'),
-    publicPath: ''
+    publicPath: 'http://localhost:9001/'
   },
   mode: 'development',
   devServer: {
     contentBase: path.resolve(__dirname,'./dist'),
     index: 'index.html',
-    port: 9000,
-    writeToDisk: true
+    port: 9001
   },
   module: {
     rules: [
@@ -84,6 +84,14 @@ module.exports = {
       title: 'Typography Page',
       template: 'src/index.hbs',
       description: 'typography page',
+    }),
+    new ModuleFederationPlugin({
+      name: 'UIApp',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './Palette': './src/components/palette/index.js',
+        './Typography': './src/components/typography/index.js'
+      }
     })
   ]
 }

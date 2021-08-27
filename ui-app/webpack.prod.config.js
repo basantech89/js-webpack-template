@@ -2,6 +2,7 @@ const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { ModuleFederationPlugin } = require('webpack').container
 
 module.exports = {
   entry: {
@@ -16,7 +17,8 @@ module.exports = {
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname,'./dist'),
-    publicPath: '/static/'
+    // publicPath: '/static/'
+    publicPath: 'http://localhost:9001/'
   },
   mode: 'production',
   module: {
@@ -87,6 +89,14 @@ module.exports = {
       title: 'Typography Page',
       template: 'src/index.hbs',
       description: 'typography page',
+    }),
+    new ModuleFederationPlugin({
+      name: 'UIApp',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './Palette': './src/components/palette/index.js',
+        './Typography': './src/components/typography/index.js'
+      }
     })
   ]
 }
