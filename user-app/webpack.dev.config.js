@@ -8,7 +8,7 @@ module.exports = {
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname,'./dist'),
-    publicPath: ''
+    publicPath: 'http://localhost:9002/'
   },
   mode: 'development',
   devServer: {
@@ -76,8 +76,12 @@ module.exports = {
     }),
     new ModuleFederationPlugin({
       name: 'UserApp',
+      filename: 'remoteEntry.js',
       remotes: {
         UIApp: 'UIApp@http://localhost:9001/remoteEntry.js'
+      },
+      exposes: {
+        './Avatar': './src/components/avatar/index.js'
       }
     })
   ]

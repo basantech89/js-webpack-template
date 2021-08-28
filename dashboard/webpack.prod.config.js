@@ -14,7 +14,7 @@ module.exports = {
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname,'./dist'),
-    publicPath: 'http://localhost:9002/'
+    publicPath: 'http://localhost:9000/'
   },
   mode: 'production',
   module: {
@@ -74,18 +74,14 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      title: 'User App',
-      template: 'src/index.hbs',
-      description: 'user application',
+      title: 'Dashboard App',
+      description: 'dashboard application',
     }),
     new ModuleFederationPlugin({
-      name: 'UserApp',
-      filename: 'remoteEntry.js',
+      name: 'DashboardApp',
       remotes: {
-        UIApp: 'UIApp@http://localhost:9001/remoteEntry.js'
-      },
-      exposes: {
-        './Avatar': './src/components/avatar/index.js'
+        UIApp: 'UIApp@http://localhost:9001/remoteEntry.js',
+        UserApp: 'UserApp@http://localhost:9002/remoteEntry.js'
       }
     })
   ]

@@ -1,22 +1,25 @@
 const path = require('path')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { ModuleFederationPlugin } = require('webpack').container
 
 module.exports = {
   entry: './src/index.js',
-  optimization: {
-    splitChunks: {
-      chunks: 'all'
+  output: {
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname,'./dist'),
+    publicPath: 'http://localhost:9000/'
+  },
+  mode: 'development',
+  devServer: {
+    contentBase: path.resolve(__dirname,'./dist'),
+    index: 'index.html',
+    port: 9000,
+    overlay: true,
+    historyApiFallback: {
+      index: 'index.html'
     }
   },
-  output: {
-    filename: '[name].[contenthash].js',
-    path: path.resolve(__dirname,'./dist'),
-    publicPath: 'http://localhost:9002/'
-  },
-  mode: 'production',
   module: {
     rules: [
       {
@@ -39,19 +42,13 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          MiniCssExtractPlugin.loader, 'css-loader'
+          'style-loader', 'css-loader'
         ]
       },
       {
         test: /\.scss$/,
         use: [
-          MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'
-        ]
-      },
-      {
-        test: /\.hbs$/,
-        use: [
-          'handlebars-loader'
+          'style-loader', 'css-loader', 'sass-loader'
         ]
       },
       {
@@ -64,28 +61,27 @@ module.exports = {
             plugins: [ '@babel/plugin-proposal-class-properties' ]
           }
         }
+      },
+      {
+        test: /\.hbs$/,
+        use: [
+          'handlebars-loader'
+        ]
       }
     ]
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css'
-    }),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      title: 'User App',
-      template: 'src/index.hbs',
-      description: 'user application',
+      title: 'Dashboard App',
+      description: 'dashboard application',
     }),
     new ModuleFederationPlugin({
-      name: 'UserApp',
-      filename: 'remoteEntry.js',
+      name: 'DashboardApp',
       remotes: {
-        UIApp: 'UIApp@http://localhost:9001/remoteEntry.js'
-      },
-      exposes: {
-        './Avatar': './src/components/avatar/index.js'
+        UIApp: 'UIApp@http://localhost:9001/remoteEntry.js',
+        UserApp: 'UserApp@http://localhost:9002/remoteEntry.js'
       }
     })
   ]

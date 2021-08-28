@@ -12,6 +12,6 @@ app.get('/', function (req, res) {
 
 app.use('/', express.static(path.resolve(__dirname, '../dist')))
 
-app.listen(9002, function () {
-  console.log("Server is running on port no 9002");
+app.listen(9000, function () {
+  console.log("Server is running on port no 9000");
 })
